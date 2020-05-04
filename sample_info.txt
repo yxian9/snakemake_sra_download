@@ -1,0 +1,3 @@
+SRR5831483  mus_hichip_500k
+SRR5831485  mus_hichip_100k
+SRR5831487  mus_hichip_50k
