@@ -18,7 +18,7 @@ FILES = defaultdict()
 with open(args.meta, "r") as f:
 # with open('meta.txt', "r") as f:
     reader = csv.reader(f, delimiter = ",")
-    header = next(reader) ## skip header
+    # header = next(reader) ## skip header
     for row in reader:
         if row == []: break
         sra_name = row[0].strip()
