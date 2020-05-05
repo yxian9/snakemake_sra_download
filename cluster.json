@@ -1,9 +1,10 @@
 {
     "__default__":
     {
+        "job": "{rule}.{wildcards.sample}",
         "mem": "3G",
-         "out": "cluster_log/{rule}.{wildcards}.out",
-         "err": "cluster_log/{rule}.{wildcards}.err"
+         "out": "cluster_log/{rule}.{wildcards.sample}.out",
+         "err": "cluster_log/{rule}.{wildcards.sample}.err"
     },
         "sra_fetch":
     {
