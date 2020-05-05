@@ -20,7 +20,7 @@ def get_sra(wildcards):
 
 rule sra_fetch:
     # input: r1 = lambda wildcards: FILES[wildcards.sample] ## sra ID   ## no input ,only ID is requried, provided via params
-    output: ("01_sra/{sample}")
+    output: temp("01_sra/{sample}")
     threads: 1
     params : sraid = get_sra
     log:   "00_log/{sample}_sra"
