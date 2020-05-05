@@ -20,10 +20,9 @@ def get_sra(wildcards):
 
 rule sra_fetch:
     # input: r1 = lambda wildcards: FILES[wildcards.sample] ## sra ID   ## no input ,only ID is requried, provided via params
-    output: temp("01_sra/{sample}")
+    output: ("01_sra/{sample}")
     threads: 1
     params : sraid = get_sra
-    message: "fastqc {input}: {threads}"
     log:   "00_log/{sample}_sra"
     shell:
         """
@@ -37,7 +36,6 @@ rule fasterq_dump:
     output: "fastq/{sample}_1.fastq", "fastq/{sample}_2.fastq"
     threads: 1
     params : jobname = "{sample}"
-    message: "fastqc {input}: {threads}"
     log:   "00_log/{sample}_fasterq_dump"
     shell:
         """
