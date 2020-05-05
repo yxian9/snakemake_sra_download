@@ -2,12 +2,12 @@
     "__default__":
     {
         "mem": "3G",
-         "out": "logs/cluster/{rule}.{wildcards}.out",
-         "err": "logs/cluster/{rule}.{wildcards}.err"
+         "out": "cluster_log/{rule}.{wildcards}.out",
+         "err": "cluster_log/{rule}.{wildcards}.err"
     },
         "sra_fetch":
     {
         "mem": "20G"
-    },
+    }
 
 }
