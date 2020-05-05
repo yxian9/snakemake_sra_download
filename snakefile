@@ -20,14 +20,14 @@ def get_sra(wildcards):
 
 rule sra_fetch:
     # input: r1 = lambda wildcards: FILES[wildcards.sample] ## sra ID   ## no input ,only ID is requried, provided via params
-    output: temp("01_sra/{sample}")
+    output: ("01_sra/{sample}")
     threads: 1
     params : sraid = get_sra
     log:   "00_log/{sample}_sra"
     shell:
         """
         module load sratoolkit/2.9.6-gcb01
-        prefetch  {params.sraid} -o {output}  2> {log} 
+        prefetch  --max-size 60G {params.sraid} -o {output}  2> {log} 
         """
 
 
@@ -69,4 +69,5 @@ rule rename:
         """
         mv {input[0]} {output[0]}
         mv {input[1]} {output[1]}
+        rm -f 01_sra/{sample}
         """
