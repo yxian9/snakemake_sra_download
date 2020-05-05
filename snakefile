@@ -24,6 +24,7 @@ rule sra_fetch:
     threads: 1
     params : sraid = get_sra
     log:   "00_log/{sample}_sra"
+    message: "sra_fetch"
     shell:
         """
         module load sratoolkit/2.9.6-gcb01
@@ -37,6 +38,7 @@ rule fasterq_dump:
     threads: 1
     params : jobname = "{sample}"
     log:   "00_log/{sample}_fasterq_dump"
+    message: 'fastq_dump'
     shell:
         """
         module load sratoolkit/2.9.6-gcb01
@@ -48,6 +50,7 @@ rule pigz_compress_r1:
     input: "fastq/{sample}_1.fastq"
     output: "fastq/{sample}_1.fastq.gz"
     threads: 5
+    message: 'pigz'
     shell:
         """
         pigz -p 5  {input}
