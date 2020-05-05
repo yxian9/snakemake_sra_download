@@ -65,7 +65,7 @@ rule pigz_compress_r2:
 rule rename:
     input: "fastq/{sample}_1.fastq.gz", "fastq/{sample}_2.fastq.gz"
     output: "fastq/{sample}_L001_R1_001.fastq.gz" ,"fastq/{sample}_L001_R2_001.fastq.gz"
-    params : sra = {sample}
+    params : sra = wildcards.sample
     shell:
         """
         mv {input[0]} {output[0]}
