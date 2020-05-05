@@ -52,7 +52,7 @@ rule pigz_compress_r1:
     threads: 5
     shell:
         """
-        pigz -p 5 -o {input}  {log}
+        pigz -p 5  {input}
         """
 
 rule pigz_compress_r2:
@@ -61,7 +61,7 @@ rule pigz_compress_r2:
     threads: 5
     shell:
         """
-        pigz -p 5 -o {input}  {log}
+        pigz -p 5  {input}
         """
 
 rule rename:
