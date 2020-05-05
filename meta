@@ -1,4 +1,5 @@
-srr	name
-SRR5831483	mus_hichip_500k
-SRR5831485	mus_hichip_100k
-SRR5831487	mus_hichip_50k
+SRR5831483,mus_hichip_500k
+SRR5831485,mus_hichip_100k
+SRR5831487,mus_hichip_50k
+SRR1248176,homo_DNaseHiC-WG-H1_2
+SRR1248175,homo_DNaseHiC-WG-H1_1
