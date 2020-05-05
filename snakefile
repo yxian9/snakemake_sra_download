@@ -7,72 +7,68 @@ FILES = json.load(open(config['SAMPLES_JSON']))
 SAMPLES = sorted(FILES.keys())
 
 TARGETS = []
-all_fq = expand("fastq/{sample}_L001_{read}_001.fastq.gz", sample = ALL_SAMPLES, read = ["R1", "R2"])
-TARGETS.expand(all_fq)
+all_fq = expand("fastq/{sample}_L001_{read}_001.fastq.gz", sample = SAMPLES, read = ["R1", "R2"])
+TARGETS.extend(all_fq)
 
 localrules: all
 
 rule all:
     input: TARGETS
 
+def get_sra(wildcards):
+    return FILES[wildcards.sample]
 
 rule sra_fetch:
-    input:
-        r1 = lambda wildcards: FILES[wildcards.sample] ## sra ID 
-    output: temp("01_sra/{sample}.sra" 
+    # input: r1 = lambda wildcards: FILES[wildcards.sample] ## sra ID   ## no input ,only ID is requried, provided via params
+    output: temp("01_sra/{sample}")
     threads: 1
-    params : jobname = "{sample}"
+    params : sraid = get_sra
     message: "fastqc {input}: {threads}"
     log:   "00_log/{sample}_sra"
     shell:
         """
-        module load fastqc
-        prefetch  -o {output}  {input}  2> {log} 
+        module load sratoolkit/2.9.6-gcb01
+        prefetch  {params.sraid} -o {output}  2> {log} 
         """
 
 
-rule fastq_dump:
-    input: "01_sra/{sample}.sra" 
+rule fasterq_dump:
+    input: "01_sra/{sample}" 
     output: "fastq/{sample}_1.fastq", "fastq/{sample}_2.fastq"
     threads: 1
     params : jobname = "{sample}"
     message: "fastqc {input}: {threads}"
-    log:   "00_log/{sample}_fastqc"
+    log:   "00_log/{sample}_fasterq_dump"
     shell:
         """
-        module load fastqc
-        fastq-dump -o 02_fqc -f fastq --noextract {input} {out}  2> {log}
+        module load sratoolkit/2.9.6-gcb01
+        fasterq-dump {input}  --split-files -O fastq  2> {log}
         """
 
 
 rule pigz_compress_r1:  
     input: "fastq/{sample}_1.fastq"
     output: "fastq/{sample}_1.fastq.gz"
-    threads: 1
-    params : jobname = "{sample}"
-    message: "fastqc {input}: {threads}"
-    log:   "00_log/{sample}_fastqc"
+    threads: 5
     shell:
         """
-        pigz -o 02_fqc -f fastq --noextract {input}  2> {log}
+        pigz -p 5 -o {input}  {log}
         """
 
 rule pigz_compress_r2:
     input: "fastq/{sample}_2.fastq"
     output: "fastq/{sample}_2.fastq.gz"
-    threads: 1
-    params : jobname = "{sample}"
-    message: "fastqc {input}: {threads}"
-    log:   "00_log/{sample}_fastqc"
+    threads: 5
     shell:
         """
-        pigz -o 02_fqc -f fastq --noextract {input}  2> {log}
+        pigz -p 5 -o {input}  {log}
         """
 
 rule rename:
-    input: "fastq/{sample}_2.fastq", "fastq/{sample}_2.fastq.gz"
+    input: "fastq/{sample}_2.fastq.gz", "fastq/{sample}_2.fastq.gz"
     output: "fastq/{sample}_L001_R1_001.fastq.gz" ,"fastq/{sample}_L001_R2_001.fastq.gz"
     shell:
         """
-        mv {input} {output}
+        mv {input[0]} {output[0]}
+        mv {input[1]} {output[1]}
         """
