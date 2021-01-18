@@ -27,7 +27,8 @@ rule sra_fetch:
     message: "sra_fetch"
     shell:
         """
-        module load sratoolkit/2.9.6-gcb01
+        # module load sratoolkit/2.9.6-gcb01
+        module load SRA-Toolkit/2.9.6-1 
         prefetch  --max-size 60G {params.sraid} -o {output}  2> {log} 
         """
 
@@ -41,7 +42,8 @@ rule fasterq_dump:
     message: 'fastq_dump'
     shell:
         """
-        module load sratoolkit/2.9.6-gcb01
+        #module load sratoolkit/2.9.6-gcb01
+        module load SRA-Toolkit/2.9.6-1 
         fasterq-dump {input}  --split-files -O fastq  2> {log}
         """
 
@@ -49,20 +51,20 @@ rule fasterq_dump:
 rule pigz_compress_r1:  
     input: "fastq/{sample}_1.fastq"
     output: "fastq/{sample}_1.fastq.gz"
-    threads: 5
+    threads: 10
     message: 'pigz'
     shell:
         """
-        pigz -p 5  {input}
+        pigz -p {threads}  {input}
         """
 
 rule pigz_compress_r2:
     input: "fastq/{sample}_2.fastq"
     output: "fastq/{sample}_2.fastq.gz"
-    threads: 5
+    threads: 10
     shell:
         """
-        pigz -p 5  {input}
+        pigz -p {threads}   {input}
         """
 
 rule rename:
@@ -72,5 +74,5 @@ rule rename:
         """
         mv {input[0]} {output[0]}
         mv {input[1]} {output[1]}
-        rm -f 01_sra/{wildcards.sample}
+        # rm -f 01_sra/{wildcards.sample}
         """
