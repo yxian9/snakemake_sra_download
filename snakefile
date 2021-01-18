@@ -36,7 +36,7 @@ rule sra_fetch:
 rule fasterq_dump:
     input: "01_sra/{sample}" 
     output: "fastq/{sample}_1.fastq", "fastq/{sample}_2.fastq"
-    threads: 1
+    threads: 6
     params : jobname = "{sample}"
     log:   "00_log/{sample}_fasterq_dump"
     message: 'fastq_dump'
@@ -44,7 +44,7 @@ rule fasterq_dump:
         """
         #module load sratoolkit/2.9.6-gcb01
         module load SRA-Toolkit/2.9.6-1 
-        fasterq-dump {input}  --split-files -O fastq  2> {log}
+        fasterq-dump  -e {threads} {input}  --split-files -O fastq  2> {log}
         """
 
 
