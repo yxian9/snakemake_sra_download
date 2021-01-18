@@ -10,7 +10,7 @@ TARGETS = []
 all_fq = expand("fastq/{sample}_L001_{read}_001.fastq.gz", sample = SAMPLES, read = ["R1", "R2"])
 TARGETS.extend(all_fq)
 
-localrules: all
+localrules: all, rename
 
 rule all:
     input: TARGETS
