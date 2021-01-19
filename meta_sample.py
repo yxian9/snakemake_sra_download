@@ -20,7 +20,7 @@ with open(args.meta, "r") as f:
     reader = csv.reader(f, delimiter = ",")
     # header = next(reader) ## skip header
     for row in reader:
-        if row == []: break
+        # if row == []: break
         sra_name = row[0].strip()
         sample_name = row[1].strip()+'_'+sra_name
         FILES[sample_name] = sra_name

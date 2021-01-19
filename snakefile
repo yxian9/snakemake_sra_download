@@ -74,5 +74,4 @@ rule rename:
         """
         mv {input[0]} {output[0]}
         mv {input[1]} {output[1]}
-        # rm -f 01_sra/{wildcards.sample}
         """
